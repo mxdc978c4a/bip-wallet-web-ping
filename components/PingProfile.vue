@@ -103,6 +103,9 @@
 			onNameClick(){
 				this.isModalOpen = true;
 			},
+			goPgpClick(address){
+				this.$router.push('/ping/messager/'+address);
+			},
         },
     };
 </script>
@@ -114,6 +117,11 @@
 			}
 			.onNameClick{
 				color: white;
+				cursor: pointer;
+				text-decoration: underline;
+			}
+			.onPgpClick{
+				color: black;
 				cursor: pointer;
 				text-decoration: underline;
 			}
@@ -158,7 +166,7 @@
 						<img class="list-item__thumbnail" :src="minterscanProfilesList[profileAddr]&&minterscanProfilesList[profileAddr].icon?getMinterscanIconUrl(profileAddr):getAvatarUrl(profileAddr)" alt="" role="presentation">
 					</div>
 					<div class="list-item__center">
-						<div class="balance__caption" @click="onNameClick()">
+						<div class="balance__caption">
 							{{ (minterscanProfilesList[profileAddr])?minterscanProfilesList[profileAddr].title : shortName }} 
 							<span style="fill: white;">
 								<PingIcon :isConfirmed="minterscanProfilesList[profileAddr] && minterscanProfilesList[profileAddr].isVerified"/>
@@ -179,6 +187,9 @@
                 <div class="modal__content">
 					<div class="u-section" style="color: black">
 						Address: {{profileAddr}}
+					</div>
+					<div class="u-section">
+						<div class="onPgpClick" @click = "goPgpClick(profileAddr)">Ping PGP message</div>
 					</div>
                 </div>
                 <div class="modal__footer">
