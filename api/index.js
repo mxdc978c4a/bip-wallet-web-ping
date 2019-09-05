@@ -2,6 +2,7 @@ import stripZeros from 'pretty-num/src/strip-zeros';
 import accounts from '~/api/accounts';
 import explorer from '~/api/explorer';
 import {COIN_NAME} from "~/assets/variables";
+import minterscan from '~/api/minterscan';
 
 /**
  * @param data
@@ -175,7 +176,14 @@ function markSecured(address) {
     };
 }
 
-
+export function getMinterscanProfiles() {
+    return minterscan.get(`profiles`)
+        .then((response) => response.data);
+}
+export function getBlockTransactionList(block, params = {}) {
+    return explorer.get(`blocks/${block}/transactions`, {params})
+        .then((response) => response.data);
+}
 
 /**
  * @typedef {Object} Block

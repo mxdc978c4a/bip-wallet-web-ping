@@ -46,8 +46,12 @@
                     <li class="menu__item">
                         <nuxt-link class="menu__link" to="/settings">Settings</nuxt-link>
                     </li>
+                    <li class="menu__item">
+                        <nuxt-link class="menu__link" to="/ping">Ping</nuxt-link>
+                    </li>
                 </menu>
             </div>
+			<slot name="menuSlot"></slot>
         </header>
 
         <div class="default-layout__content-wrap">

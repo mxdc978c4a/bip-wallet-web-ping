@@ -37,6 +37,16 @@ export default {
             data: [],
             meta: {},
         };
+		state.pingProfiles= {};
+		state.pingTransactionList= {};
+		state.minterscanProfilesList= {};
+		state.pingLikeList= {};
+		state.pingIsPgpRegistered= false;
+		state.pingPgpList={};
+		state.pingPostList={};
+		state.pingChatList={};
+		state.pingChats={};
+		
         resetAuthToken();
     },
     SET_PROFILE_USER,
@@ -89,6 +99,38 @@ export default {
     POP_HISTORY: (state) => {
         state.history.pop();
     },
+	PING_PROFILE_LIST: (state, data) => {
+		state.pingProfiles = Object.assign({}, state.pingProfiles, data);
+	},
+	PING_TRANSACTION_LIST: (state, data) => {
+		state.pingTransactionList = Object.assign({}, state.pingTransactionList, data);
+	},
+	PING_MINTERSCAN_PROFILES_LIST: (state, data) => {
+		state.minterscanProfilesList = Object.assign({}, state.minterscanProfilesList, data);
+	},
+	PING_LIKE_LIST: (state, data) => {
+		state.pingLikeList = Object.assign({}, state.pingLikeList, data);
+	},
+	PING_PGP_REGISTER: (state) => {
+		state.pingIsPgpRegistered = true;
+	},
+	PING_PGP_LIST: (state, data) => {
+		state.pingPgpList = Object.assign({}, state.pingPgpList, data);
+	},
+	PING_POST_LIST: (state, data) => {
+		state.pingPostList = Object.assign({}, state.pingPostList, data);
+	},
+	PING_CHAT_LIST: (state, data) => {
+		state.pingChatList = Object.assign({}, state.pingChatList, data);
+	},
+	PING_CHATS: (state, data) => {
+		state.pingChatList = Object.assign({}, state.pingChatList, data);
+	},
+	PING_UPDATE_TABLE: (state, data) => {
+		state.pingUpdateTable = state.pingUpdateTable + 1;
+	},
+	
+	
 };
 
 function SET_PROFILE_USER(state, profile) {

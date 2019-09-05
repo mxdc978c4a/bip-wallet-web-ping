@@ -26,6 +26,16 @@ export default function() {
         },
         userList: {},
         history: [],
+		pingProfiles: {},
+		pingTransactionList: {},
+		minterscanProfilesList: {},
+		pingLikeList: {},
+		pingIsPgpRegistered: false,
+		pingPgpList: {},
+		pingPostList: {},
+		pingChatList: {},
+		pingChats: {},
+		pingUpdateTable: 0,
     };
     // vuex-persistedstate enabled in nuxt.config.js
 }

@@ -42,7 +42,7 @@ const connectCSP = prepareCSP(envConfigParsed, (item) => {
     return item.indexOf('API_URL') >= 0 || item.indexOf('RTM_URL') >= 0 || item.indexOf('API_HOST') >= 0;
 });
 const imageCSP = prepareCSP(envConfigParsed, (item) => {
-    return item === 'APP_ACCOUNTS_API_URL';
+    return item === 'APP_ACCOUNTS_API_URL' || 'MINTERSCAN_API_URL';;
 });
 
 
@@ -148,5 +148,8 @@ module.exports = {
             'minter-js-sdk',
             'minter-js-org',
         ],
+		extend(config, { isDev, isClient }) {
+		  config.resolve.alias["vue"] = "vue/dist/vue.common";
+		}
     },
 };
