@@ -137,9 +137,7 @@
 				}
 				this.$store.dispatch('FETCH_PING_PGP_LIST')
 					.then((txList) => {
-						console.log(1111, txList);
 						if(txList && this.publicKey == txList[this.$store.getters.address]){
-							console.log(22222, txList, txList[this.$store.getters.address]);
 							this.isFormSending = false;
 							this.isRegistered = true;
 							this.$store.dispatch('FETCH_PING_PGP_REGISTER');
@@ -185,6 +183,7 @@
                             this.isFormSending = false;
                             this.isWaitModalOpen = false;
                             this.clearForm();
+							this.$store.dispatch('FETCH_PING_PGP_REGISTER');
                         }).catch((error) => {
                             console.log(error);
                             this.isFormSending = false;

@@ -81,6 +81,9 @@
 				const encrypted = encryptMessage(this.pgpKey, this.form.message);
 				return pgpPrefix+encrypted;
 			},
+            ...mapState({
+				pingIsPgpRegistered:'pingIsPgpRegistered',
+			}),
 			...mapGetters([
                 'address',
 				'wallet',
@@ -130,7 +133,7 @@
 					.then((txList) => {
 						let publicKey = txList[this.userAddr];
 						if(!publicKey){
-							return [];
+							return;
 						}
 						publicKey = Buffer.from(publicKey, 'Base64');
 						let pgpKey = getEcdh(this.wallet._privKey, publicKey);
@@ -139,6 +142,7 @@
 							//console.log(12312321321, pgpKey);
 							this.updateChatArray();
 							this.timer = setInterval(this.updateChatArray, 5000)
+							return;
 						}
 					});
 			},
@@ -219,6 +223,9 @@
                 this.form.message = '';
                 this.$v.$reset();
             },
+			onSettingClick(){
+				this.$router.push("/ping/setting");
+			}
 
         },
     };
@@ -266,6 +273,9 @@
 					box-shadow: 0 2px 1px 0 rgba(93,196,82,.5);
 				}
 				
+				.message.no-message {
+					align-self: center;
+				}
 				
 				.message__text,.message__image__text .message__text__content {
 					padding-top: 10px;
@@ -324,52 +334,79 @@
 				pre{
 					margin: 0 10px 0 0;
 				}
+				.pinglink{
+					color: black;
+					cursor: pointer;
+					text-decoration: underline;
+				}
 			</style>
-
-			<form class="u-section u-container" @submit.prevent="openTxModal">
-				<div style="display: flex; flex-direction: row; align-items: center;">
-					<label class="bip-field bip-field--row" :class="{'is-error': $v.form.message.$error}" style="display: flex; flex-direction: column; align-items: center;">
-						<input class="bip-field__input " type="text"
-							   v-model.trim="form.message"
-							   @blur="$v.form.message.$touch();"
-							   placeholder="Message"
-							   style="margin-top:0px; border-top-right-radius: 0; border-bottom-right-radius: 0;"
-						></input>
-					</label>
-					<button 
-						class="bip-button bip-button--main" 
-						style="display: flex; flex-direction: column; width: 46px;height: 46px; align-items: center; border-top-left-radius: 0; border-bottom-left-radius: 0;"
-						:class="{'is-loading': isFormSending, 'is-disabled': $v.$invalid || isFormSending}"
-					>
+			<div v-if="pingIsPgpRegistered">
+				<form class="u-section u-container" @submit.prevent="openTxModal">
+					<div style="display: flex; flex-direction: row; align-items: center;">
+						<label class="bip-field bip-field--row" :class="{'is-error': $v.form.message.$error}" style="display: flex; flex-direction: column; align-items: center;">
+							<input class="bip-field__input " type="text"
+								   v-model.trim="form.message"
+								   @blur="$v.form.message.$touch();"
+								   placeholder="Message"
+								   style="margin-top:0px; border-top-right-radius: 0; border-bottom-right-radius: 0;"
+							></input>
+						</label>
+						<button 
+							class="bip-button bip-button--main" 
+							style="display: flex; flex-direction: column; width: 46px;height: 46px; align-items: center; border-top-left-radius: 0; border-bottom-left-radius: 0;"
+							:class="{'is-loading': isFormSending, 'is-disabled': $v.$invalid || isFormSending}"
 						>
-					</button>
-				</div>
-				<span class="bip-field__label">{{textSize}} of 751 symbols</span>
-				<div class="bip-field__label">
-					<span class="form-field__error" v-if="$v.form.message.$dirty && !$v.form.message.maxLength">Max 751 symbols</span>
-					<span class="form-field__error" v-if="$v.form.message.$dirty && !$v.form.message.required">Enter message</span>
-				</div>
-				<div style="display: flex; flex-direction: row; align-items: center;">
-					<div style="display: flex; flex-direction: column; align-items: center;">
-						<span class="list-item__name u-text-nowrap">Transaction Fee</span>
+							>
+						</button>
 					</div>
-					<div style="flex: auto; display: flex; flex-direction: column; align-items: center;" class="u-text-right" >
-						<div class="list-item__label list-item__label--strong">
-							{{ fee.coinSymbol }} {{ fee.value | pretty }}
-							<span class="u-display-ib" v-if="!fee.isBaseCoin">({{ $store.getters.COIN_NAME }} {{ fee.baseCoinValue | pretty }})</span>
+					<span class="bip-field__label">{{textSize}} of 751 symbols</span>
+					<div class="bip-field__label">
+						<span class="form-field__error" v-if="$v.form.message.$dirty && !$v.form.message.maxLength">Max 751 symbols</span>
+						<span class="form-field__error" v-if="$v.form.message.$dirty && !$v.form.message.required">Enter message</span>
+					</div>
+					<div style="display: flex; flex-direction: row; align-items: center;">
+						<div style="display: flex; flex-direction: column; align-items: center;">
+							<span class="list-item__name u-text-nowrap">Transaction Fee</span>
+						</div>
+						<div style="flex: auto; display: flex; flex-direction: column; align-items: center;" class="u-text-right" >
+							<div class="list-item__label list-item__label--strong">
+								{{ fee.coinSymbol }} {{ fee.value | pretty }}
+								<span class="u-display-ib" v-if="!fee.isBaseCoin">({{ $store.getters.COIN_NAME }} {{ fee.baseCoinValue | pretty }})</span>
+							</div>
 						</div>
 					</div>
-				</div>
-				
-			</form>
-					
+				</form>
+			</div>
+			<div v-else class="u-section u-container">
+				<p>
+					<span>You can't send private message because you have not registered the public key.</span>
+				</p>
+				<p>
+					<span class="pinglink" @click="onSettingClick()"> SETTING </span>
+				</p>
+			</div>
+			
 			<div class="chat__body">
-				<div class="messages">
+				<div class="messages" v-if="chatArray[0]">
 					<div class="message" v-bind:class="{'my-message': message.type == 2}" v-for="message in chatArray">
 						<div class="message__text">
-							<div class="message__text__content">{{message.text}}</div>
+							<div class="message__text__content">
+								{{message.text}}
+							</div>
 						</div>
-						<div class="message__time"><pre>{{message.timeParts.time}}</pre><pre>{{message.timeParts.date}}</pre></div>
+						<div class="message__time">
+							<pre>{{message.timeParts.time}}</pre>
+							<pre>{{message.timeParts.date}}</pre>
+						</div>
+					</div>
+				</div>
+				<div class="messages" v-else>
+					<div class="message no-message">
+						<div class="message__text">
+							<div class="message__text__content">
+								No messages here yet... 
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -413,7 +450,7 @@
 		</div>
 		<div v-else>
 			<div class="u-section u-container">
-				<div class="list-title list-title--bold">404</div>
+				<div class="list-title list-title--bold">ERROR 404</div>
 			</div>
 		</div>
 	</div>

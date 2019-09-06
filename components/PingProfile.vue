@@ -114,6 +114,8 @@
 		<style>
 			.pinglink{
 				color: white;
+				cursor: pointer;
+				text-decoration: underline;
 			}
 			.onNameClick{
 				color: white;
@@ -150,6 +152,9 @@
 			<div class="list-item__right">
 				<div class="balance__caption" v-if="isMyProfile">
 					<nuxt-link class="pinglink" to="/ping/setting"> SETTING </nuxt-link>
+				</div>
+				<div class="balance__caption" v-else>
+					<div class="pinglink" @click = "goPgpClick(profileAddr)">Ping PGP message</div>
 				</div>
 			</div>
 		</div>

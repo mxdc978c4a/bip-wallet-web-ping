@@ -6,17 +6,19 @@
 	
 	import {mapGetters, mapState} from 'vuex';
 	import {shortHashFilter} from "~/assets/utils";
-	import {isMinterAddress, generateMxBySha1, isPrivateMessage, getMinterscanIconUrl} from '~/assets/ping';
+	import {isMinterAddress, generateMxBySha1, isPrivateMessage, getMinterscanIconUrl, timeAgo} from '~/assets/ping';
 	
 	import PingIcon from '~/components/PingIcon';
 	
     export default {
         components: {
 			PingIcon,
+			Modal,
         },
         filters: {
             pretty,
 			short: shortHashFilter,
+			timeAgo: timeAgo,
         },
 		props: {
 		
@@ -30,6 +32,7 @@
 				isPublicListLoadingError: false,
 				isChatListLoading: false,
 				isChatListLoadingError: false,
+				isModalOpen: false,
             };
         },
         validations() {
@@ -40,6 +43,7 @@
                 delegation: 'delegation',
 				pingChatList: 'pingChatList',
 				minterscanProfilesList: 'minterscanProfilesList',
+				pingIsPgpRegistered:'pingIsPgpRegistered',
             }),
 			...mapGetters([
                 'username',
@@ -101,10 +105,18 @@
 			getAvatarUrl,
 			getMinterscanIconUrl,
 			openChat(addr){
-				this.$router.push("/ping/messager/"+addr);
+				if(this.pingIsPgpRegistered){
+					this.$router.push("/ping/messager/"+addr);
+				}else{
+					this.isModalOpen = true;
+					console.log(1234456);
+				}
 			},
 			openProfile(addr){
 				this.$router.push("/ping/profile/"+addr);
+			},
+			onSettingClick(){
+				this.$router.push("/ping/setting");
 			}
         },
     };
@@ -125,12 +137,17 @@
 			.ping-list.list-item__left:hover{
 				background: #EDF0F2;
 			}
+			.pinglink{
+				color: black;
+				cursor: pointer;
+				text-decoration: underline;
+			}
 		</style>
 		<div class="u-section u-container">
 				<label class="bip-field bip-field--row">
 					<input class="bip-field__input " type="text"
 						   v-model.trim="searchText"
-						   placeholder="Looking for a friend?"
+						   placeholder="Have the friend? Enter Mx Address"
 					></input>
 				</label>
 		</div>
@@ -139,13 +156,39 @@
 				<div class="ping-list list-item__left" @click.stop="openProfile">
 					<img class="list-item__thumbnail" :src="minterscanProfilesList[userAddr]?getMinterscanIconUrl(userAddr):getAvatarUrl(userAddr)" alt="" role="presentation">
 				</div>
-				<div class="list-item__center">
-					<div class="balance__caption">{{(minterscanProfilesList[userAddr] && minterscanProfilesList[userAddr].title)?minterscanProfilesList[userAddr].title: userAddr | short}} <span style="fill: white;"><PingIcon/></span></div>
+				<div class="list-item__center" v-if="userAddr == address">
+					<div class="balance__caption">
+						Favorite
+					</div>
 				</div>
-				<div class="list-item__right">
-					<div class="balance__caption">2 days</div>
+				<div class="list-item__center" v-else>
+					<div class="balance__caption">
+						{{(minterscanProfilesList[userAddr] && minterscanProfilesList[userAddr].title)?minterscanProfilesList[userAddr].title: userAddr | short}} 
+						<span style="fill: white;">
+							<PingIcon/>
+						</span>
+					</div>
+				</div>
+				<div class="list-item__right" v-if="pingChatList[userAddr] && userAddr!=address">
+					<div class="balance__caption">{{pingChatList[userAddr].timestamp | timeAgo}} </div>
 				</div>
 			</div>
 		</div>
+		<Modal :isOpen.sync="isModalOpen" :hideCloseButton="true">
+			<div class="modal__panel">
+				<h3 class="modal__title u-h2">ERROR</h3>
+				<div class="modal__content">
+					<p>
+						<span>You can't send private message because you have not registered the public key.</span>
+					</p>
+					<p>
+						<span class="pinglink" @click="onSettingClick()"> SETTING </span>
+					</p>
+				</div>
+				<div class="modal__footer">
+					<button class="bip-button bip-button--ghost-main" @click="isModalOpen = false">Close</button>
+				</div>
+			</div>
+		</Modal>
 	</div>
 </template>
