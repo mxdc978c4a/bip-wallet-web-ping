@@ -48,7 +48,6 @@
 				else{
 					this.searchAddr = generateHashtagMx(this.searchText);
 				}
-				console.log(this.searchAddr);
 			}
 		},
     };

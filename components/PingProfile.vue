@@ -122,7 +122,7 @@
 				cursor: pointer;
 				text-decoration: underline;
 			}
-			.onPgpClick{
+			.blackClickLink{
 				color: black;
 				cursor: pointer;
 				text-decoration: underline;
@@ -154,7 +154,7 @@
 					<nuxt-link class="pinglink" to="/ping/setting"> SETTING </nuxt-link>
 				</div>
 				<div class="balance__caption" v-else>
-					<div class="pinglink" @click = "goPgpClick(profileAddr)">Ping PGP message</div>
+					<div class="pinglink" @click = "goPgpClick(profileAddr)">Ping PGP</div>
 				</div>
 			</div>
 		</div>
@@ -191,10 +191,17 @@
 				
                 <div class="modal__content">
 					<div class="u-section" style="color: black">
-						Address: {{profileAddr}}
-					</div>
-					<div class="u-section">
-						<div class="onPgpClick" @click = "goPgpClick(profileAddr)">Ping PGP message</div>
+						<p>Address: {{profileAddr}}</p>
+						<p>
+							<a class="blackClickLink" v-bind:href="'//minterscan.net/address/'+profileAddr" target="_blank">
+								Minterscan
+							</a>
+						</p>
+						<p>
+							<div class="blackClickLink" @click = "goPgpClick(profileAddr)">
+								Ping PGP
+							</div>
+						</p>
 					</div>
                 </div>
                 <div class="modal__footer">

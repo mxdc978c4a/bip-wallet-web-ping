@@ -211,6 +211,9 @@
 			.ping-list .ping__post__button:hover{
 				color: black;
 			}
+			.fontSizeMedium{
+				font-size: medium;
+			}
 		</style>
 		
 		<style type="text/css">
@@ -239,31 +242,33 @@
 						</div>
 					</div>
 				</div>
-				<div class="u-container replying list-item__right" v-if="isComment(tx)" @click.stop=''>
-					Replying to <nuxt-link class="pingHashtagLink" :to="getReplyingLink(tx)" >@{{getReplyingTo(tx)}}</nuxt-link>
+				<div class="u-section">
+					<div class="u-container replying list-item__right" v-if="isComment(tx)" @click.stop=''>
+						Replying to <nuxt-link class="pingHashtagLink" :to="getReplyingLink(tx)" >@{{getReplyingTo(tx)}}</nuxt-link>
+					</div>
+					<div class="u-container">
+						<div>
+							<div class="u-grid u-grid--vertical-margin">
+								<div class="u-cell fontSizeMedium">
+									<PingTableMessage :txProp="tx" />
+								</div>
+							</div>
+							<div class="list-item" style="font-size:1.2em; font-weight: bold; color: gray; background: none;">
+								<div class="list-item__left ping__post__button"  :class="{'list-item__overflow': true}" @click.stop="txClick(tx.hash)">
+									COMMENT
+								</div>
+								<div class="list-item__right ping__post__button" :class="{'list-item__overflow': true}" @click.stop="">
+									{{tx.likes}}
+									<PingTableLike :txProp="tx" @click.stop=""/>
+								</div>
+							</div>
+						</div>
+						
+						<div class="u-grid--vertical-margin" v-if="activeTx === tx.hash" @click.stop=''>
+							<PingTableCommentForm :txProp="tx"/>
+						</div>
+					</div>
 				</div>
-				<div class="u-section u-container"   >
-					<div>
-						<div class="u-grid u-grid--vertical-margin">
-							<div class="u-cell">
-								<PingTableMessage :txProp="tx" />
-							</div>
-						</div>
-						<div class="list-item" style="font-size:1.2em; font-weight: bold; color: gray; background: none;">
-							<div class="list-item__left ping__post__button"  :class="{'list-item__overflow': true}" @click.stop="txClick(tx.hash)">
-								COMMENT
-							</div>
-							<div class="list-item__right ping__post__button" :class="{'list-item__overflow': true}" @click.stop="">
-								{{tx.likes}}
-								<PingTableLike :txProp="tx" @click.stop=""/>
-							</div>
-						</div>
-					</div>
-					
-					<div class="u-grid--vertical-margin" v-if="activeTx === tx.hash" @click.stop=''>
-						<PingTableCommentForm :txProp="tx"/>
-					</div>
-				</div>	
 			</div>
 		</div>
 

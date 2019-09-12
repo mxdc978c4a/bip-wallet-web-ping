@@ -79,7 +79,7 @@
 				}
 				
 				let tetera = [];
-				for(const el of this.transactionList){
+				for(const el of this.transactionListTemp){
 					const addr = generateCommentMx(el.block,el.txn);
 					if(counts[addr]){
 						tetera.push([el, counts[addr]]);
@@ -110,11 +110,11 @@
 			},
 			updateTransactionList(){
 				if(!isMinterAddress(this.watchingAddr)){
-					this.transactionList = [];
+					this.transactionListTemp = [];
 					return;
 				}
 				if(this.pingTransactionList[this.watchingAddr]){
-					this.transactionList = this.pingTransactionList[this.watchingAddr].data;
+					this.transactionListTemp = this.pingTransactionList[this.watchingAddr].data;
 					if(this.pingLikeList){
 						this.likeList = this.pingLikeList;
 						this.sortTransactionList();
@@ -122,7 +122,7 @@
 				}
 				this.$store.dispatch('FETCH_PING_TRANSACTION_LIST', {page:1, address: this.watchingAddr})
 					.then((txListInfo) => {
-						this.transactionList = txListInfo.data;
+						this.transactionListTemp = txListInfo.data;
 						this.updateLikeList();
 						return;
 					})
@@ -256,34 +256,36 @@
 						</div>
 					</div>
 				</div>
-				<div class="u-container ping-list replying list-item__right" v-if="isComment(tx)">
-					Replying to 
-					<span @click.stop=''>
-						<nuxt-link class="ping-list pingHashtagLink" :to="getReplyingLink(tx)" >@{{getReplyingTo(tx)}}</nuxt-link>
-					</span>
+				<div class="u-section">
+					<div class="u-container ping-list replying list-item__right" v-if="isComment(tx)">
+						Replying to 
+						<span @click.stop=''>
+							<nuxt-link class="ping-list pingHashtagLink" :to="getReplyingLink(tx)" >@{{getReplyingTo(tx)}}</nuxt-link>
+						</span>
+					</div>
+					<div class="u-container">
+						<div>
+							<div class="u-grid u-grid--vertical-margin">
+								<div class="u-cell">
+									<PingTableMessage :txProp="tx" />
+								</div>
+							</div>
+							<div class="list-item" style="font-size:1.2em; font-weight: bold; color: gray; background: none;">
+								<div class="list-item__left ping-list ping__post__button"  :class="{'list-item__overflow': true}" @click.stop="txClick(tx.hash)">
+									COMMENT
+								</div>
+								<div class="list-item__right ping-list ping__post__button" :class="{'list-item__overflow': true}" @click.stop="">
+									{{tx.likes}}
+									<PingTableLike :txProp="tx" @click.stop=""/>
+								</div>
+							</div>
+						</div>
+						
+						<div class="u-grid--vertical-margin" v-if="activeTx === tx.hash" @click.stop=''>
+							<PingTableCommentForm :txProp="tx"/>
+						</div>
+					</div>
 				</div>
-				<div class="u-section u-container"   >
-					<div>
-						<div class="u-grid u-grid--vertical-margin">
-							<div class="u-cell">
-								<PingTableMessage :txProp="tx" />
-							</div>
-						</div>
-						<div class="list-item" style="font-size:1.2em; font-weight: bold; color: gray; background: none;">
-							<div class="list-item__left ping-list ping__post__button"  :class="{'list-item__overflow': true}" @click.stop="txClick(tx.hash)">
-								COMMENT
-							</div>
-							<div class="list-item__right ping-list ping__post__button" :class="{'list-item__overflow': true}" @click.stop="">
-								{{tx.likes}}
-								<PingTableLike :txProp="tx" @click.stop=""/>
-							</div>
-						</div>
-					</div>
-					
-					<div class="u-grid--vertical-margin" v-if="activeTx === tx.hash" @click.stop=''>
-						<PingTableCommentForm :txProp="tx"/>
-					</div>
-				</div>	
 			</div>
 		</div>
 

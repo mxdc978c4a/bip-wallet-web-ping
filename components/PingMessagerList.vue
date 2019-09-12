@@ -112,7 +112,7 @@
 					console.log(1234456);
 				}
 			},
-			openProfile(addr){
+			openProfileClick(addr){
 				this.$router.push("/ping/profile/"+addr);
 			},
 			onSettingClick(){
@@ -153,7 +153,7 @@
 		</div>
 		<div class="list" v-if="isChatListLoading">
 			<div class="ping-list list-item" v-for="userAddr in profilesList" @click="openChat(userAddr)">
-				<div class="ping-list list-item__left" @click.stop="openProfile">
+				<div class="ping-list list-item__left" @click.stop="openProfileClick(userAddr)">
 					<img class="list-item__thumbnail" :src="minterscanProfilesList[userAddr]?getMinterscanIconUrl(userAddr):getAvatarUrl(userAddr)" alt="" role="presentation">
 				</div>
 				<div class="list-item__center" v-if="userAddr == address">

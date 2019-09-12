@@ -113,7 +113,7 @@ export default {
 	FETCH_PING_TRANSACTION_LIST: ({ commit },  params={page: 1, address: ''}) => {
 		return getAddressTransactionList(params.address, {
             page: params.page || 1,
-			limit: 50,
+			limit: 500,
         })
             .then((txListInfo) => {
 				let temp = {};
@@ -216,7 +216,7 @@ export default {
 	FETCH_CHAT: ({ commit },  params={page: 1, address: ''}) => {
 		return getAddressTransactionList(params.address, {
             page: params.page || 1,
-			limit: 50,
+			limit: 500,
         })
             .then((txListInfo) => {
 				let temp = {};

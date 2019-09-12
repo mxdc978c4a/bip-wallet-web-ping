@@ -121,7 +121,7 @@
                 form: {
                     message: {
 						required,
-                        maxLength: maxLength(1024),
+                        maxLength: maxLength(1019),
                     },
 					tag:{
 						minLength: minLength(3),
@@ -472,7 +472,7 @@
 						   placeholder="What’s happening?"
 						   :style="{height: '150px'}"
                     ></textarea>
-                    <span class="form-field__error" v-if="$v.form.message.$dirty && !$v.form.message.maxLength">Max 1024 symbols</span>
+                    <span class="form-field__error" v-if="$v.form.message.$dirty && !$v.form.message.maxLength">Max 1019 symbols</span>
 					<span class="bip-field__error" v-if="$v.form.message.$dirty && !$v.form.message.required">Enter message</span>
                 </label>
             </div>

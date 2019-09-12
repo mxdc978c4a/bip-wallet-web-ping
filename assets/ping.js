@@ -73,7 +73,7 @@ export function timeAgo(timestamp){
 	const time = formatDistance(
 		parseISO(timestamp), 
 		new Date(), 
-		{addSuffix: false,}
+		{addSuffix: true,}
 	);
 	return time;
 }
