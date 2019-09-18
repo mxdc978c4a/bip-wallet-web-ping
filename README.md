@@ -1,6 +1,6 @@
-# bip-wallet
+# bip-wallet-ping
 
-[wallet.bip.to](https://wallet.bip.to)
+[193.124.206.108:3010/ping/](http://193.124.206.108:3010/ping/)
 
 ## Deployment
 
