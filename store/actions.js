@@ -127,7 +127,7 @@ export default {
 			.then((profileListInfo) => {
 				let temp = {};
 				profileListInfo.forEach((el)=>{
-					temp[el.address] = el.profile;
+					temp[el.address] = el;
 				})
 				commit('PING_MINTERSCAN_PROFILES_LIST', temp);
 			})

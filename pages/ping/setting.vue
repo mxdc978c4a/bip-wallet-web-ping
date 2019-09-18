@@ -4,12 +4,14 @@
 
 	import PingProfile from '~/components/PingProfile';
 	import PingInitPgpForm from '~/components/PingInitPgpForm';
+	import PingVifNotAuth from '~/components/PingVifNotAuth';
 	
     export default {
         PAGE_TITLE: 'Ping Setting',
         components: {
 			PingProfile,
 			PingInitPgpForm,
+			PingVifNotAuth,
         },
         head() {
             return {
@@ -32,12 +34,17 @@
 </script>
 <template id="main">
     <div>
-		<PingProfile :profileAddr="profileAddress"/>
-		<div class="u-section u-container">
-			<PingInitPgpForm/>
+		<div v-if="$store.getters.isAuthorized">
+			<PingProfile :profileAddr="profileAddress"/>
+			<div class="u-section u-container">
+				<PingInitPgpForm/>
+			</div>
+			<div class="u-section u-container">
+				Visit the <a href='https://minterscan.net/faq/profile' target="_blank">MinterScan web-site</a> to register your own profile.
+			</div>
 		</div>
-		<div class="u-section u-container">
-			Visit the <a href='https://minterscan.net/faq/profile' target="_blank">MinterScan web-site</a> to register your own profile.
+		<div v-else>
+			<PingVifNotAuth />
 		</div>
     </div>
 </template>

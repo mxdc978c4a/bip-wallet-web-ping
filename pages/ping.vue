@@ -11,8 +11,8 @@
 		},
 	};
 </script>
-<template id="main" v-if="$store.getters.isAuthorized">
-	<Layout :is-bg-white="true"  :title="$options.PAGE_TITLE">
+<template id="main" >
+	<Layout :is-bg-white="true"  :title="$options.PAGE_TITLE" >
 		<template slot="menuSlot">
 			<div class="menu">
 				<menu class="menu__container u-container">

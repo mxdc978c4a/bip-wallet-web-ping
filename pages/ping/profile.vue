@@ -4,12 +4,14 @@
 
 	import PingProfile from '~/components/PingProfile';
 	import PingTable from '~/components/PingTable';
+	import PingVifNotAuth from '~/components/PingVifNotAuth';
 	
     export default {
         PAGE_TITLE: 'Ping Profile',
         components: {
 			PingProfile,
-			PingTable
+			PingTable,
+			PingVifNotAuth,
         },
         head() {
             return {
@@ -33,9 +35,14 @@
     };
 </script>
 <template id="main">
-    <div>
-		<PingProfile :profileAddr="profileMxAddr"/>
-		<div class="list-title list-title--bold">Latest Pings</div>
-		<PingTable :watchingAddr="profileMxAddr"/>
-    </div>
+	<div>
+		<div v-if="profileMxAddr != $store.getters.address || $store.getters.isAuthorized">
+			<PingProfile :profileAddr="profileMxAddr"/>
+			<div class="list-title list-title--bold">Latest Pings</div>
+			<PingTable :watchingAddr="profileMxAddr"/>
+		</div>
+		<div v-else>
+			<PingVifNotAuth />
+		</div>
+	</div>
 </template>

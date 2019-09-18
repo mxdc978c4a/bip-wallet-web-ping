@@ -4,12 +4,14 @@
 	import {isMinterAddress, generateMxBySha1} from '~/assets/ping';
 	import PingMessagerList from '~/components/PingMessagerList';
 	import PingMessagerChat from '~/components/PingMessagerChat';
+	import PingVifNotAuth from '~/components/PingVifNotAuth';
 	
     export default {
         PAGE_TITLE: 'Ping Messager',
         components: {
 			PingMessagerList,
 			PingMessagerChat,
+			PingVifNotAuth,
         },
         head() {
             return {
@@ -40,11 +42,17 @@
 </script>
 <template id="main">
     <div>
-		<div v-if="isRouterParamsValid">
-			<PingMessagerChat />
+		<div v-if="$store.getters.isAuthorized">
+			<div v-if="isRouterParamsValid">
+				<PingMessagerChat />
+			</div>
+			<div v-else>
+				<PingMessagerList/>
+			</div>
 		</div>
 		<div v-else>
-			<PingMessagerList/>
+			<PingVifNotAuth />
 		</div>
+		
     </div>
 </template>

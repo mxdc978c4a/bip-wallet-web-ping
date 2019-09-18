@@ -2,7 +2,7 @@
 	import getTitle from '~/assets/get-title';
 	import PingProfile from '~/components/PingProfile';
 	import PingPostForm from '~/components/PingPostForm';
-	
+	import PingVifNotAuth from '~/components/PingVifNotAuth';
 	
 	import PingTable from '~/components/PingTable';
 	import {generateMxBySha1, mainAddress} from '~/assets/ping';
@@ -13,6 +13,7 @@
 			PingProfile,
 			PingPostForm,
 			PingTable,
+			PingVifNotAuth,
 		},
 		head() {
 			return {
@@ -32,8 +33,13 @@
 </script>
 <template id="main" v-if="$store.getters.isAuthorized">
 	<div>
-		<PingProfile :profileAddr="profileAddress"/>
-		<PingPostForm/>
+		<div v-if="$store.getters.isAuthorized">
+			<PingProfile :profileAddr="profileAddress"/>
+			<PingPostForm/>
+		</div>
+		<div v-else>
+			<PingVifNotAuth />
+		</div>
 		<div class="list-title list-title--bold">Recomended Pings</div>
 		<PingTable :watchingAddr="likeAddr" />
 	</div>

@@ -98,7 +98,7 @@
 					newArr.push(item);
 				}
 				this.transactionList = newArr;
-				
+				this.isLoading = false;
 			},
 			updateLikeList(){
 				this.$store.dispatch('FETCH_PING_LIKE_LIST')
@@ -109,6 +109,7 @@
 						})
 			},
 			updateTransactionList(){
+				this.isLoading = true;
 				if(!isMinterAddress(this.watchingAddr)){
 					this.transactionListTemp = [];
 					return;
@@ -235,7 +236,9 @@
 			.list-item {background-position: top;}
 		</style>
 		
-		
+		<div class="u-section u-container" v-if="isLoading">
+			Loading...
+		</div>
 		<div class="list" v-if="transactionList && transactionList.length">
 			<div class="ping-list list-item-wrap" v-for="tx in transactionList" v-if="isPingTx(tx)" @click="onMessageClick(tx)">
 				<div class="list-item list-item--tappable" @click.stop="onProfileClick(tx)" >
